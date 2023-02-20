@@ -1,0 +1,156 @@
+openapi: 3.0.3
+info:
+  title: Microservice1
+  description: |-
+    This is a simple Microservice containing two end Points. One to check the status of the service and other to create the person object and return concatenated String response.
+  
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080/service1
+
+paths:
+  /getServiceStatus:
+    get:
+      summary: Get the status of service.
+      tags:
+        - service
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Up
+                
+        '404':
+          description: RESOURCE NOT FOUND
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+                
+        '405':
+          description: METHOD NOT ALLOWED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+        '500':
+          description: INTERNAL SERVER ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+                
+  /response:
+    post:
+      summary: Create Person.
+      tags:
+        - person
+      requestBody:
+        description: Person details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+        '405':
+          description: METHOD NOT ALLOWED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+                
+        '404':
+          description: RESOURCE NOT FOUND
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response404'
+                
+                
+        '500':
+          description: INTERNAL SERVER ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+                
+                
+              
+components:
+  schemas:
+    Person:
+      title: Create Person
+      type: object
+      properties:
+        Name:
+          type: string
+          description: FirstName
+        Surname:
+          type: string
+          description: LastName
+      required:
+        - Name
+        - Surname
+      
+      
+    Response :
+      title: Response Message
+      type: object
+      properties:
+        exception:
+          type: string
+          description: The name of exception
+        message:
+          type: string
+          description: Exception message
+        timestamp:
+          type: string
+          description: Timestamp
+        httpStatus:
+          type: string
+          description: httpStatus Value
+        httpStatusCode:
+          type: integer
+          description: http status code
+          
+          
+    Response404 :
+      title: Response Message 404
+      type: object
+      properties:
+        path:
+          type: string
+          description: The request url
+        error:
+          type: string
+          description: Error message
+        timestamp:
+          type: string
+          description: Timestamp
+        status:
+          type: integer
+          description: http status code
+      
+    
+  
